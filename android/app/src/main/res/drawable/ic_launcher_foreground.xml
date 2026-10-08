@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Tennis Ball Main Body -->
+    <path
+        android:fillColor="#FBBF24"
+        android:pathData="M 54,30 A 24,24 0 1,1 53.99,30 Z" />
+
+    <!-- Tennis Ball Left Curved Seam -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M 38,36 C 45,43 45,65 38,72" />
+
+    <!-- Tennis Ball Right Curved Seam -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M 70,36 C 63,43 63,65 70,72" />
+
+    <!-- Subtle 3D Highlight on Ball -->
+    <path
+        android:fillColor="#33FFFFFF"
+        android:pathData="M 54,32 A 22,22 0 0,1 74,48 C 70,38 60,34 54,32 Z" />
+</vector>

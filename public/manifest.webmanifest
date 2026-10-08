@@ -1,0 +1,33 @@
+{
+  "name": "Teniszruha.hu - Hivatalos Mobilalkalmazás",
+  "short_name": "Teniszruha",
+  "description": "Tenisz ruházat, ütők és felszerelések hivatalos webáruháza",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
+  "lang": "hu",
+  "dir": "ltr",
+  "categories": ["shopping", "sports"],
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

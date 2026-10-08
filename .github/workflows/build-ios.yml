@@ -1,0 +1,97 @@
+name: Build iOS Application (IPA)
+
+on:
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: 'Xcode Build Configuration'
+        required: true
+        default: 'Release'
+        type: choice
+        options:
+          - Release
+          - Debug
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'ios/**'
+      - 'index.html'
+      - 'capacitor.config.ts'
+      - 'package.json'
+      - '.github/workflows/build-ios.yml'
+
+jobs:
+  build-ios:
+    name: Build iOS IPA on macOS Runner
+    runs-on: macos-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: |
+          npm ci || npm install
+
+      - name: Build Web Application
+        run: |
+          npm run build
+
+      - name: Capacitor Sync iOS
+        run: |
+          npx cap sync ios
+
+      - name: Set up CocoaPods
+        run: |
+          cd ios/App
+          pod install --repo-update
+
+      - name: Build Xcode Archive (.xcarchive)
+        env:
+          CONFIG: ${{ github.event.inputs.configuration || 'Release' }}
+        run: |
+          mkdir -p build
+          xcodebuild archive \
+            -workspace ios/App/App.xcworkspace \
+            -scheme App \
+            -configuration $CONFIG \
+            -destination 'generic/platform=iOS' \
+            -archivePath build/App.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGN_ENTITLEMENTS="" \
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES
+
+      - name: Package .IPA from .xcarchive
+        run: |
+          mkdir -p build/Payload
+          cp -R build/App.xcarchive/Products/Applications/*.app build/Payload/
+          cd build
+          zip -r -y Teniszruha.ipa Payload
+          ls -lh Teniszruha.ipa
+
+      - name: Upload iOS IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Teniszruha-iOS-IPA
+          path: build/Teniszruha.ipa
+          retention-days: 30
+
+      - name: Upload Full XCArchive Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Teniszruha-App-xcarchive
+          path: build/App.xcarchive
+          retention-days: 14
