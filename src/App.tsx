@@ -18,6 +18,7 @@ import { Capacitor } from '@capacitor/core';
 import { Product, ProductCategory } from './types';
 import { fetchProducts, fetchCategories, formatPrice, isLiveConnectedToStore } from './services/api';
 import { INITIAL_PRODUCTS, INITIAL_CATEGORIES } from './data/mockData';
+import { getBrandLogo } from './assets/brandLogos';
 import { SlidersHorizontal, ArrowUpDown, RefreshCw, ChevronUp, Sparkles, Trophy, Tag, ShieldCheck, Truck, RotateCcw, Facebook, Instagram, Mail, Phone, ExternalLink, SearchX, Package } from 'lucide-react';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
@@ -657,6 +658,7 @@ const AppContent: React.FC = () => {
               {availableBrands.map(brand => {
                 const brandSlug = brand.toLowerCase().replace(/['\s]/g, '-');
                 const isBrandSelected = selectedBrand === brand;
+                const brandLogoSrc = getBrandLogo(brandSlug);
                 return (
                   <button
                     key={brand}
@@ -667,16 +669,15 @@ const AppContent: React.FC = () => {
                         : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800'
                     }`}
                   >
-                    <img
-                      src={`/brands/${brandSlug}.png`}
-                      alt=""
-                      className={`h-3 w-auto max-w-[40px] object-contain ${
-                        isBrandSelected ? 'brightness-0' : 'dark:invert opacity-80'
-                      }`}
-                      onError={e => {
-                        (e.target as HTMLElement).style.display = 'none';
-                      }}
-                    />
+                    {brandLogoSrc && (
+                      <img
+                        src={brandLogoSrc}
+                        alt=""
+                        className={`h-3 w-auto max-w-[40px] object-contain ${
+                          isBrandSelected ? 'brightness-0' : 'dark:invert opacity-80'
+                        }`}
+                      />
+                    )}
                     <span>{brand}</span>
                   </button>
                 );

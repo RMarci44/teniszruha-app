@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Sparkles, ShieldCheck, Truck, Trophy, ChevronRight, ChevronLeft } from 'lucide-react';
+import bannerNadal from '../assets/banner-nadal.jpg';
+import bannerFerfi from '../assets/banner-ferfi.jpg';
+import bannerNoi from '../assets/banner-noi.jpg';
 
 interface HeroBannerProps {
   onSelectCategorySlug?: (slug: string) => void;
@@ -14,7 +17,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onSelectCategorySlug }) 
       title: 'Rafa Nadal',
       subtitle: 'Hivatalos Nike & Babolat kollekció',
       tag: 'Kiemelt Kollekció',
-      image: '/banner-nadal.jpg',
+      image: bannerNadal,
       slug: 'nadal',
       accentColor: 'from-amber-500/80 to-slate-900',
     },
@@ -23,7 +26,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onSelectCategorySlug }) 
       title: 'Férfi',
       subtitle: 'Pólók, nadrágok & melegítők',
       tag: 'Prémium Ruházat',
-      image: '/banner-ferfi.jpg',
+      image: bannerFerfi,
       slug: 'ferfi',
       accentColor: 'from-amber-500/80 to-slate-900',
     },
@@ -32,7 +35,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onSelectCategorySlug }) 
       title: 'Női',
       subtitle: 'Szoknyák, topok & kiegészítők',
       tag: 'Új Kollekció',
-      image: '/banner-noi.jpg',
+      image: bannerNoi,
       slug: 'noi',
       accentColor: 'from-amber-500/80 to-slate-900',
     },

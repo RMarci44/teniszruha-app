@@ -3,6 +3,7 @@ import { Heart, ShoppingBag, Check, Eye, Package } from 'lucide-react';
 import { Product } from '../types';
 import { formatPrice } from '../services/api';
 import { useCart } from '../context/CartContext';
+import { getBrandLogo } from '../assets/brandLogos';
 
 interface ProductCardProps {
   product: Product;
@@ -12,16 +13,29 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails }) => {
   const { addToCart, toggleWishlist, isWishlisted } = useCart();
   const [isAdded, setIsAdded] = useState(false);
-  const [imageError, setImageError] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
+  const [imageFailed, setImageFailed] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>('');
 
   useEffect(() => {
-    setImageError(false);
+    setImageIndex(0);
+    setImageFailed(false);
     setSelectedSize('');
   }, [product.id]);
 
   const isFavorite = isWishlisted(product.id);
-  const mainImage = product.images?.[0]?.src || '';
+  const images = product.images || [];
+  const activeImageObj = images[imageIndex];
+  const activeImageSrc = activeImageObj?.src || activeImageObj?.thumbnail || '';
+
+  const handleImageError = () => {
+    if (imageIndex + 1 < images.length) {
+      setImageIndex(prev => prev + 1);
+    } else {
+      setImageFailed(true);
+    }
+  };
+
   const price = product.prices?.price || '0';
   const regularPrice = product.prices?.regular_price || price;
   const isOnSale = product.on_sale || (parseInt(regularPrice, 10) > parseInt(price, 10));
@@ -32,6 +46,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
   );
   const brandName = brandAttr?.terms?.[0]?.name;
   const brandSlug = brandName ? brandName.toLowerCase().replace(/['\s]/g, '-') : '';
+  const brandLogoSrc = getBrandLogo(brandSlug);
 
   // Find sizes from attributes if any
   const sizeAttr = product.attributes?.find(
@@ -84,19 +99,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
         <div className="flex items-center gap-1.5 pointer-events-auto">
           {brandName && (
             <div className="px-2 py-0.5 rounded-md bg-white/90 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800/90 shadow-sm backdrop-blur-md flex items-center justify-center h-6">
-              <img
-                src={`/brands/${brandSlug}.png`}
-                alt={brandName}
-                className="h-3 w-auto max-w-[45px] object-contain dark:invert opacity-90"
-                onError={e => {
-                  (e.target as HTMLElement).style.display = 'none';
-                  const textElem = (e.target as HTMLElement).nextElementSibling;
-                  if (textElem) (textElem as HTMLElement).style.display = 'inline';
-                }}
-              />
-              <span style={{ display: 'none' }} className="text-[9px] font-extrabold text-amber-500 uppercase">
-                {brandName}
-              </span>
+              {brandLogoSrc ? (
+                <img
+                  src={brandLogoSrc}
+                  alt={brandName}
+                  className="h-3 w-auto max-w-[45px] object-contain dark:invert opacity-90"
+                />
+              ) : (
+                <span className="text-[9px] font-extrabold text-amber-500 uppercase">
+                  {brandName}
+                </span>
+              )}
             </div>
           )}
 
@@ -117,12 +130,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
 
       {/* Image Container with hover zoom */}
       <div className="relative w-full pt-[95%] bg-slate-50 dark:bg-slate-950/60 overflow-hidden border-b border-slate-100 dark:border-slate-800/40">
-        {mainImage && !imageError ? (
+        {activeImageSrc && !imageFailed ? (
           <img
-            src={mainImage}
+            src={activeImageSrc}
             alt={product.name}
-            onError={() => setImageError(true)}
+            onError={handleImageError}
             loading="lazy"
+            referrerPolicy="no-referrer"
+            crossOrigin="anonymous"
             className="absolute inset-0 w-full h-full object-contain p-3.5 group-hover:scale-105 transition-transform duration-500"
           />
         ) : (

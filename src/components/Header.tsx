@@ -3,6 +3,7 @@ import { ShoppingBag, Heart, Search, X, MessageCircleQuestion, Phone, User, Sun,
 import { useCart } from '../context/CartContext';
 import { formatPrice } from '../services/api';
 import { Product } from '../types';
+import logoImg from '../assets/logo.png';
 
 interface HeaderProps {
   searchQuery: string;
@@ -87,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <div className="relative flex items-center h-8 sm:h-9">
               <img
-                src="/logo.png"
+                src={logoImg}
                 alt="Teniszruha.hu"
                 className="h-7 sm:h-8 w-auto object-contain drop-shadow"
                 onError={e => {

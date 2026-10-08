@@ -103,6 +103,8 @@ export const WishlistModal: React.FC<WishlistModalProps> = ({
                       <img
                         src={product.images[0].src}
                         alt=""
+                        referrerPolicy="no-referrer"
+                        crossOrigin="anonymous"
                         className="w-full h-full object-contain"
                       />
                     ) : (
