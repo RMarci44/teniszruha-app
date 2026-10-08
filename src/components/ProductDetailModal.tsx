@@ -178,7 +178,6 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                     src={currentImage}
                     alt={product.name}
                     referrerPolicy="no-referrer"
-                    crossOrigin="anonymous"
                     className="w-full h-full object-contain pointer-events-none"
                     draggable={false}
                   />
@@ -250,7 +249,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                         : 'border-slate-200 dark:border-slate-800 opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img src={img.src} alt="" referrerPolicy="no-referrer" crossOrigin="anonymous" className="w-full h-full object-contain" />
+                    <img src={img.src} alt="" referrerPolicy="no-referrer" className="w-full h-full object-contain" />
                   </button>
                 ))}
               </div>

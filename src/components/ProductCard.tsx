@@ -14,11 +14,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
   const { addToCart, toggleWishlist, isWishlisted } = useCart();
   const [isAdded, setIsAdded] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
+  const [useThumbnail, setUseThumbnail] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>('');
 
   useEffect(() => {
     setImageIndex(0);
+    setUseThumbnail(false);
     setImageFailed(false);
     setSelectedSize('');
   }, [product.id]);
@@ -26,11 +28,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
   const isFavorite = isWishlisted(product.id);
   const images = product.images || [];
   const activeImageObj = images[imageIndex];
-  const activeImageSrc = activeImageObj?.src || activeImageObj?.thumbnail || '';
+  const activeImageSrc = useThumbnail
+    ? (activeImageObj?.thumbnail || activeImageObj?.src || '')
+    : (activeImageObj?.src || activeImageObj?.thumbnail || '');
 
   const handleImageError = () => {
-    if (imageIndex + 1 < images.length) {
+    if (!useThumbnail && activeImageObj?.thumbnail && activeImageObj.thumbnail !== activeImageObj.src) {
+      setUseThumbnail(true);
+    } else if (imageIndex + 1 < images.length) {
       setImageIndex(prev => prev + 1);
+      setUseThumbnail(false);
     } else {
       setImageFailed(true);
     }
@@ -135,9 +142,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
             src={activeImageSrc}
             alt={product.name}
             onError={handleImageError}
-            loading="lazy"
             referrerPolicy="no-referrer"
-            crossOrigin="anonymous"
             className="absolute inset-0 w-full h-full object-contain p-3.5 group-hover:scale-105 transition-transform duration-500"
           />
         ) : (

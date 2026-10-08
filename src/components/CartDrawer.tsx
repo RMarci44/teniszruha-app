@@ -142,7 +142,7 @@ export const CartDrawer: React.FC = () => {
                 >
                   <div className="w-16 h-16 rounded-xl bg-white dark:bg-slate-900 shrink-0 overflow-hidden p-1 border border-slate-200 dark:border-slate-800 flex items-center justify-center">
                     {imgUrl ? (
-                      <img src={imgUrl} alt="" referrerPolicy="no-referrer" crossOrigin="anonymous" className="w-full h-full object-contain" />
+                      <img src={imgUrl} alt="" referrerPolicy="no-referrer" className="w-full h-full object-contain" />
                     ) : (
                       <Package className="w-6 h-6 text-slate-400 dark:text-slate-600 stroke-[1.5]" />
                     )}
